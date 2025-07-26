@@ -1,6 +1,11 @@
 const API_CONFIG = {
-    BASE_URL: process.env.REACT_APP_API_BASE_URL || 'http://localhost:3009',
-    API_URL: process.env.REACT_APP_API_URL || 'http://localhost:3009/api',
+    // Use relative URLs to hide the actual server address
+    BASE_URL: process.env.NODE_ENV === 'production' 
+        ? process.env.REACT_APP_API_BASE_URL || '' 
+        : (process.env.REACT_APP_API_BASE_URL || 'http://localhost:3009'),
+    API_URL: process.env.NODE_ENV === 'production'
+        ? '/api'  // Use relative path in production
+        : (process.env.REACT_APP_API_URL || 'http://localhost:3009/api'),
     ENDPOINTS: {
         // Contact endpoints
         CONTACT: '/contact',

@@ -1,7 +1,9 @@
 import axios from 'axios';
+import { buildApiUrl } from '../config/api';
+import API_CONFIG from '../config/api';
 
 // Base URL for your clothing API
-const API_BASE_URL = 'http://localhost:3009/api/clothing';
+const API_BASE_URL = buildApiUrl(API_CONFIG.ENDPOINTS.CLOTHING);
 
 // GET all active clothing
 export const getClothing = async () => {

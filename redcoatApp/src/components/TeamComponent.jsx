@@ -9,7 +9,7 @@ const team = [
         name: 'Greg Pai Jr.',
         title: 'Founder, Red Coat | Sports Management Veteran',
         image: GregJrBio,
-        intro: 'Originally from New Jersey, Greg is looking to build conections from an authentic place. He wants to help the community and connect Red Coat clients to brands of different sizes.',
+        intro: `Originally from New Jersey, Greg is focused on building authentic connections. He’s passionate about supporting the community and helping connect Red Coat clients with brands of all sizes.`,
         bio: 'Greg Pai is a seasoned sports management professional with a strong track record in building successful brand partnerships. After years of working with top organizations, he founded Red Coat, a sponsorship agency focused on bold and effective brand connections. Outside of professional work, he has been featured on "Local Love" (Pittsburgh Season),now streaming on Very Local. This experience was a step outside of his comfort zone and showcased his openness to new experiences and connections. At heart, Greg is passionate about building relationships with clients, partners, and audiences. He believes the most valuable results comes from trust, collaboration, and a willingness to be authentic',
         email: 'gregpai@gmail.com',
     },
@@ -25,15 +25,15 @@ const team = [
         name: 'Ethan Villa',
         title: 'Creative Coordinator',
         image: EthanBio1,
-        intro: 'Ethan Villa is a recent graduate who is looking to connect and positively impact varies communities. He is a passionate, outgoing person that is open to people from all walks of life.',
-        bio: 'Ethan Villa is a recent graduate who is looking to connect and positively impact varies communities. He is a passionate, outgoing person that is open to people from all walks of life.',
+        intro: 'Hailing from Central Texas, Ethan is a young and ambitious creative contributing his talents to Red Coat. He is the mind behind our logo and website design and continues to bring fresh, innovative ideas to the team.',
+        bio: `Ethan Villa is a recent graduate from Point Park University that is eager to share his talents with the world. He provides new ideas that benefits the team and our sponsors. His main focus is the development of Red Coat's technology so we can reach others easier. But along with that, he provides designs for the clothing and a let's get it attitude.`,
         email: 'villaethan720@gmail.com'
     },
     {
       name: 'Ed Thompson',
       title: 'Red Coat Photographer',
       image: Logo,
-      intro: 'A Pittsburgh Native, Ed Thompson is a well known in the Steeler community. He wants to share is talents with Red Coat to being able to give clients quality images and continue to add to his resume.',
+      intro: `A Pittsburgh native, Ed Thompson is well known within the Steelers community. He’s excited to share his talents with Red Coat by providing high-quality imagery for our clients while continuing to grow his portfolio.`,
       bio: 'Ed Thompson is a veteran in the photography world. He currently works as a multimedia photojournalist for pghsteelersnow where he joins the Steelers for summer camps and home game. He can be found on the sidelines taking photos of the athletes. He is an easy-going individual who want to share his art with others.',
       email: 'example@aol.com'
     }
@@ -57,9 +57,6 @@ function Team() {
         <section className="relative bg-center h-[110vh]" style={{ backgroundImage: `url(${Logo})` }}>
           <div className="absolute inset-0 bg-black bg-opacity-60 flex flex-col justify-center text-white text-center px-6">
             <h1 className="text-5xl font-bold font-brand">Meet The Red Coat Team 🎈</h1>
-            <p className="text-xl text-gray-200 max-w-3xl mx-auto font-modern">
-              A passionate, authentic group of individuals that wants to connect Red Coat clients with brands and contributing to the homeless community.
-            </p>
           </div>
         </section>
   
