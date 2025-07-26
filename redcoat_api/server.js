@@ -8,6 +8,7 @@ const userRoutes = require('./src/auth/adminRoutes'); //admin verification
 const sgMail = require('@sendgrid/mail'); //sending emails
 const uploadRoutes = require('./src/imageUpload/routes')//uploading images
 const emailRoutes = require('./src/contact/route');//sending email for contacting Us
+const contactAdminRoutes = require('./src/contact/adminRoutes'); //admin contact management
 const paymentRoutes = require('./src/payment/paymentRoutes'); //payment processing
 
 const app = express();
@@ -24,6 +25,7 @@ app.use('/api', userRoutes)
 
 app.use('/api', uploadRoutes);
 app.use('/api/contact', emailRoutes);
+app.use('/api/admin/contacts', contactAdminRoutes); //admin contact management routes
 app.use('/api', paymentRoutes); //payment routes
 
 // Health check

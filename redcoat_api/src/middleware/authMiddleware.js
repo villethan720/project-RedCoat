@@ -21,7 +21,7 @@ exports.authenticateToken = (req, res, next) => {
 
 exports.requireAdmin = (req, res, next) => {
     //checks if user is admin level
-    if(req.user.role !== 'admin') {
+    if(!req.user.role || req.user.role !== 'admin') {
         return res.status(403).json({ message: 'admin access required' });
     }
     next();

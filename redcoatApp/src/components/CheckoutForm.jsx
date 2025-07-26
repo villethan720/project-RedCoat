@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useCart } from './CartContext';
+import { buildApiUrl } from '../config/api';
+import API_CONFIG from '../config/api';
 
 const CheckoutForm = ({ onSuccess, onError }) => {
   const stripe = useStripe(); //stripe object for payment processing
@@ -9,7 +11,7 @@ const CheckoutForm = ({ onSuccess, onError }) => {
   
   const [loading, setLoading] = useState(false); //loading state for payment processing
   const [error, setError] = useState(null); //error state for payment processing
-
+  
   // Calculate total
   const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0); //calculate total price of items in cart
 
@@ -27,7 +29,7 @@ const CheckoutForm = ({ onSuccess, onError }) => {
 
     try {
         //call backend to create payment intent
-      const response = await fetch('http://localhost:3009/api/create-payment-intent', {
+      const response = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.PAYMENT, '/create-payment-intent'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -86,6 +88,7 @@ const CheckoutForm = ({ onSuccess, onError }) => {
       },
     },
   };
+
 
   return (
     <div className="max-w-md mx-auto bg-gray-800 p-6 rounded-lg">

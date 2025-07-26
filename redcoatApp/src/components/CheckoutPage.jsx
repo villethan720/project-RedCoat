@@ -10,6 +10,16 @@ const CheckoutPage = () => {
   const { cartItems } = useCart();
   const [showSuccessModal, setShowSuccessModal] = useState(false); //state for success modal when payment is successful
 
+    //payment information need to add shipping and address features
+    const [purchaserForm, setPurchaserForm] = useState({
+      purchaserEmail: '',
+      shippingAddress: '',
+    })
+
+
+  const handleSubmit = async (event) => {
+
+  }
   // Checkpoint to track modal state changes
   useEffect(() => {
     console.log('🎭 Checkpoint 14: CheckoutPage showSuccessModal changed to:', showSuccessModal);
@@ -41,6 +51,12 @@ const CheckoutPage = () => {
     navigate('/product');
   };
 
+    //for changes on purchaser form with email and address
+    const handlePurchaserChange = (e) => {
+      const { purchaserEmail, value } = e.target;
+  
+    }
+
   return (
     <div className="min-h-screen bg-black text-white py-20">
       {/* Success Modal */}
@@ -67,6 +83,16 @@ const CheckoutPage = () => {
           <h1 className="text-4xl font-bold mb-4 font-brand">Checkout</h1>
           <p className="text-gray-300 font-modern">Complete your Red Coat purchase</p>
         </div>
+
+        {/* purchaser information */}
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div>
+          <label className="block text-white text-sm font-medium mb-2 font-modern">
+            Email Address
+          </label>
+          <input type="email" name="purachaserEmail" placeholder="Enter your email address" value={purchaserForm.purchaserEmail} onChange={handlePurchaserChange} className="p-3 rounded bg-gray-800 placeholder-gray-400 col-span-2" required/>
+        </div>
+      </form>
 
         <Elements stripe={stripePromise}>
           <CheckoutForm 

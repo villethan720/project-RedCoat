@@ -8,6 +8,7 @@ import {
 } from '../api/clothing'; //import functions for backend use
 import ImageDropZone from '../components/ImageDropZone';
 import { Link } from 'react-router-dom';
+import Logo from '../components/Assets/redcoatLogo.png';
 
 function UpdateCatalog() {
   const [clothingList, setClothingList] = useState([]);
@@ -49,7 +50,7 @@ function UpdateCatalog() {
     try {
       const data = await getClothing();
       setClothingList(data); //store clothing in state
-      setFilteredResults(data);
+      setFilteredResults(data); //set filter 
     } catch (error) {
       console.error('Failed to load clothing:', error);
     }
@@ -100,6 +101,7 @@ function UpdateCatalog() {
       return;
     }
 
+    //check for image
     if (!newClothing.image_url) {
       alert('Please upload an image');
       return;
@@ -122,7 +124,7 @@ function UpdateCatalog() {
         category: '',
         image_url: '',
         description: '',
-        is_active: 'true',
+        is_active: 'true', //alwys set to true originally
       });
       setStockBySize({ S: '', M: '', L: '', XL: '' , ONE_SIZE: ''}); //reset sizes 
       fetchClothing();
@@ -134,18 +136,22 @@ function UpdateCatalog() {
   //handles updating clothing using new form
   const handleUpdate = async (id) => {
     try {
+      //check for id value
       if (!id) {
         console.error('❌ No ID passed to handleUpdate');
         return;
       }
   
+      //chckpoint for testing
       console.log('🔧 Updating ID:', id);
       console.log('📦 Current editClothing:', editClothing);
   
+      //get stock information, parse info
       const stock = typeof editClothing.stock_by_size === 'string'
         ? JSON.parse(editClothing.stock_by_size)
         : editClothing.stock_by_size;
   
+        //place to store edits and pass through for update
       const finalClothing = {
         ...editClothing,
         is_active: editClothing.is_active === 'true' || editClothing.is_active === true,
@@ -153,7 +159,7 @@ function UpdateCatalog() {
       };
   
       await updateClothing(id, finalClothing);
-      setEditClothing(null);
+      setEditClothing(null); //reset edit clothing for next edit
       fetchClothing();
     } catch (error) {
       console.error('Failed to update clothing:', error.response?.data || error.message);
@@ -190,19 +196,20 @@ function UpdateCatalog() {
 
   return (
     <div className="bg-black p-6 text-white min-h-screen">
+      {/* Hero section */}
       <section
-        className="relative h-screen bg-cover bg-center mb-6"
-        style={{ backgroundImage: "url('/picture.jpg')" }}
+        className="relative h-[110vh] bg-center"
+        style={{ backgroundImage: `url(${Logo})` }}
       >
-        <div className="absolute inset-0 bg-black bg-opacity-60 flex flex-col justify-center text-red-600 text-center px-6">
+        <div className="absolute inset-0 bg-black bg-opacity-60 flex flex-col justify-center text-white text-center px-6">
           <h2 className="text-5xl font-bold">Update the Red Coat Catalog</h2>
           <p className="text-2xl text-gray-400 font-semibold">
             Add, update, delete, or restore clothing for the page!
           </p>
           <div className="space-x-4 px-8 py-4 text-center">
             <Link to="/admin-dashboard" className="bg-red-600 px-6 py-3 rounded text-white">Back to Dashboard</Link>
-            <Link to="/update-catalog" className="bg-red-600 px-6 py-3 rounded text-white">Update Catalog</Link>
-            <Link to="clothing-order" className="bg-red-600 px-6 py-3 rounded text-white">Clothing Orders</Link>
+            <Link to="/inventory" className="bg-red-600 px-6 py-3 rounded text-white">Inventory</Link>
+            <Link to="/clothing-order" className="bg-red-600 px-6 py-3 rounded text-white">Clothing Orders</Link>
           </div>
         </div>
       </section>
@@ -242,7 +249,8 @@ function UpdateCatalog() {
                     <option value="true">True</option>
                     <option value="false">False</option>
                 </select>
-                ) : (
+                ) : ( 
+                //include input for fields
                 <input
                     type="text"
                     name={key}
@@ -273,13 +281,16 @@ function UpdateCatalog() {
               />
             </div>
           ))}
+          {/* image upload area */}
           <h3 className="text-lg font-semibold mt-4 mb-2">Image Upload</h3>
           <ImageDropZone
+          //save url in state 
             onUpload={(url) =>
               setNewClothing((prev) => ({ ...prev, image_url: url ?? ''}))
             }
           />
 
+          {/*get saved url */}
           {newClothing.image_url ? (
             <div className="mt-2">
               <img
@@ -297,12 +308,13 @@ function UpdateCatalog() {
       {/* Modify Clothing Section */}
       {showModifySection && (
         <>
+          {/* filter bar for edits */}
           <div className="mb-4 space-y-3 text-center justify-center items-center">
             <input
               type="text"
               placeholder="Search clothing"
               value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
+              onChange={(e) => setSearchText(e.target.value)} 
               className="p-2 w-1/3 px-4 bg-gray-800 text-white rounded border border-white"
             />
             <input
@@ -315,6 +327,8 @@ function UpdateCatalog() {
             <button onClick={handleSearch} className="bg-red-600 px-4 py-2 rounded mt-2 border border-black">
               Search
             </button>
+
+            {/* allow refresh */}
             <button onClick={handleRefresh} className="bg-red-600 px-4 py-2 rounded mt-2 border border-black">
               Refresh
             </button>
@@ -322,6 +336,7 @@ function UpdateCatalog() {
 
           <ul className="space-y-4 mt-6">
             {currentItems 
+            //show all clothing active and not active
               .sort((a, b) => (a.is_active === b.is_active ? 0 : a.is_active ? -1 : 1))
               .map(item => (
                 <li key={item.id} className="bg-gray-800 p-4 rounded">

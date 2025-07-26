@@ -11,17 +11,20 @@ import Cart from './components/CartComponent';
 import ProductDetail from './components/ProductDetail';
 import CheckoutPage from './components/CheckoutPage';
 import { CartProvider } from './components/CartContext';
+import { AuthProvider } from './components/AuthContext';
 import AdminLogin from './admin/AdminLogin';
 import AdminDashboard from './admin/AdminDashboard';
 import AdminRoute from './components/AdminRoute';
 import UpdateCatalog from './admin/UpdateCatalog';
 import Inventory from './admin/ClothingInventory';
 import ClothingOrder from './admin/ClothingOrders';
+import ContactManagement from './admin/ContactManagement';
 import CheckoutForm from './components/CheckoutForm';
 
 
 function App() {
     return(
+        <AuthProvider>
         <CartProvider>
         <Router>
             <div className="flex flex-col min-h-screen bg-black text-white font-brand">
@@ -59,6 +62,11 @@ function App() {
                         <ClothingOrder/>
                     </AdminRoute>
                 } />
+                <Route path="/contact-management" element={
+                    <AdminRoute>
+                        <ContactManagement/>
+                    </AdminRoute>
+                } />
             </Routes>
             </main>
 
@@ -66,6 +74,7 @@ function App() {
             </div>
         </Router>
         </CartProvider>
+        </AuthProvider>
     )
 }
 

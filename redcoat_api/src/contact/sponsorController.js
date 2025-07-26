@@ -17,7 +17,7 @@ const sponsorEmail = async (req, res) => {
     `;
 
     const html = `
-        <h2>New Sponsor/Representtive Inquiry</h2>
+        <h2>New Sponsor/Representative Inquiry</h2>
         <p><strong>Name:</strong> ${name}</p>
         <p><strong>Email:</strong> ${email}</p>
         <p><strong>Phone:</strong> ${phone || 'N/A'}</p>
@@ -25,11 +25,25 @@ const sponsorEmail = async (req, res) => {
     `;
 
     try { 
+        // Save to database first
+        const insertQuery = `
+            INSERT INTO contacts (name, email, phone, message, form_type)
+            VALUES ($1, $2, $3, $4, $5)
+            RETURNING id
+        `;
+        
+        const result = await pool.query(insertQuery, [name, email, phone || null, message, 'sponsor']);
+        
+        // Then send email
         await sendEmail(process.env.SPONSOR_EMAIL, process.env.FROM_EMAIL, subject, text, html);
-        res.status(200).json({ success: 'Message has been sent'});
+        
+        res.status(200).json({ 
+            success: 'Message has been sent!',
+            contactId: result.rows[0].id
+        });
     } catch(error){
-        console.error(error);
-        res.status(500).json({error: 'Failed to send message'});
+        console.error('Error in sponsorEmail:', error);
+        res.status(500).json({error: 'Failed to send message or save to database'});
     }
 };
 

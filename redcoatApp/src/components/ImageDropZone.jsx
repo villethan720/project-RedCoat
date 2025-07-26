@@ -1,5 +1,7 @@
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
+import { buildApiUrl } from '../config/api';
+import API_CONFIG from '../config/api';
 
 function ImageDropZone({ onUpload }) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -14,7 +16,7 @@ function ImageDropZone({ onUpload }) {
 
       try {
         console.log("Uploading image to server...");
-        const response = await axios.post('http://localhost:3009/api/upload', formData, {
+        const response = await axios.post(buildApiUrl(API_CONFIG.ENDPOINTS.UPLOAD), formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }

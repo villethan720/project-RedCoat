@@ -25,11 +25,25 @@ const generalEmail = async (req, res) => {
     `;
 
     try {
+        // Save to database first
+        const insertQuery = `
+            INSERT INTO contacts (name, email, phone, message, form_type)
+            VALUES ($1, $2, $3, $4, $5)
+            RETURNING id
+        `;
+        
+        const result = await pool.query(insertQuery, [name, email, phone || null, message, 'general']);
+        
+        // Then send email
         await sendEmail(process.env.GENERAL_EMAIL, process.env.FROM_EMAIL, subject, text, html);
-        res.status(200).json({ success: 'Message has been sent'});
+        
+        res.status(200).json({ 
+            success: 'Message has been sent!',
+            contactId: result.rows[0].id
+        });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({error: 'Failed to send message'});
+        console.error('Error in generalEmail:', error);
+        res.status(500).json({error: 'Failed to send message or save to database'});
     }
 };
 

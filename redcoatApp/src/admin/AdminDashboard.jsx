@@ -17,6 +17,7 @@ const AdminDashboard = () => {
                     <Link to="/update-catalog" className="bg-black px-6 py-3 rounded text-white">Update Catalog</Link>
                     <Link to="/inventory" className="bg-black px-6 py-3 rounded text-white">Inventory</Link>
                     <Link to="/clothing-order" className="bg-black px-6 py-3 rounded text-white">Clothing Orders</Link>
+                    <Link to="/contact-management" className="bg-black px-6 py-3 rounded text-white">Contact Management</Link>
             </section>
 
 

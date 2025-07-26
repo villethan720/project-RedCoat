@@ -51,7 +51,6 @@ const confirmPayment = async (req, res) => {
 
         //if payment intent is successful, send confirmation email
         if (paymentIntent.status === 'succeeded') {
-            // Here you can add order processing logic
             // - Save order to database
             // - Update inventory
             // - Send confirmation email
@@ -63,7 +62,6 @@ const confirmPayment = async (req, res) => {
                 html: `<h2>New Order</h2><pre>${paymentIntent.metadata.items}</pre>`
             };
             await sgMail.send(msg);
-            // - etc.
 
             res.json({ 
                 success: true, 

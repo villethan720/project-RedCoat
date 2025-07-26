@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { LOGIN_URL } from '../api/login';
+import { useAuth } from '../components/AuthContext';
 
 const AdminLogin = () => {
     //set variables for login
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const { login } = useAuth();
 
 
 
@@ -15,7 +17,7 @@ const AdminLogin = () => {
         e.preventDefault();
         try {
             const res = await axios.post(LOGIN_URL, { email, password }); //API call
-            localStorage.setItem('adminToken', res.data.token); //store authentication token
+            login(res.data.token); // Use AuthContext to store token
             navigate('/admin-dashboard');
         } catch (err){
             alert('Login failed: ' + err.response.data.message);
