@@ -1,10 +1,7 @@
 const API_CONFIG = {
     // Use relative URLs to hide the actual server address
     BASE_URL: process.env.NODE_ENV === 'production' 
-        ? process.env.REACT_APP_API_BASE_URL || '' 
-        : (process.env.REACT_APP_API_BASE_URL),
-    API_URL: process.env.NODE_ENV === 'production'
-        ? '/api'  // Use relative path in production
+        ? '/api'
         : (process.env.REACT_APP_API_URL),
     ENDPOINTS: {
         // Contact endpoints
@@ -27,6 +24,8 @@ const API_CONFIG = {
         
         // Health check
         HEALTH: '/health'
+
+        
     }
 };
 
