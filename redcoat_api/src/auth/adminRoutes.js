@@ -11,10 +11,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // Public routes
 router.post('/login', loginUser);
-router.post('/register', registerUser);
 
-// Protected route (logged-in users)
-router.put('/users/:userId/reward', authenticateToken);
 
 // Admin-only route
 router.get('/admin/users', authenticateToken, requireAdmin, async (req, res) => {
@@ -24,27 +21,6 @@ router.get('/admin/users', authenticateToken, requireAdmin, async (req, res) => 
         );
         res.json(result.rows);
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Server error');
-    }
-});
-
-//verifying email
-router.get('/verify-email', async (req, res) => {
-    const { token } = req.query;
-
-    try {
-        const result = await pool.query(
-            'UPDATE users SET is_verified = true, verification_token = null WHERE verification_token = $1 RETURNING *',
-            [token]
-        );
-
-        if (result.rowCount === 0) {
-            return res.status(400).json({ message: 'Invalid or expired token'});
-        }
-
-        res.send('Email verified successfully! You can now log in.');
-    }catch (error) {
         console.error(error);
         res.status(500).send('Server error');
     }

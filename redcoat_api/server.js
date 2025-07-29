@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const express = require("express");
 const cors = require('cors');
-const { Pool } = require('./db');
+const pool = require('./db');
 const clothingRoutes = require('./src/clothing/routes') //db connection
 const userRoutes = require('./src/auth/adminRoutes'); //admin verification
 const sgMail = require('@sendgrid/mail'); //sending emails
@@ -10,15 +10,22 @@ const uploadRoutes = require('./src/imageUpload/routes')//uploading images
 const emailRoutes = require('./src/contact/route');//sending email for contacting Us
 const contactAdminRoutes = require('./src/contact/adminRoutes'); //admin contact management
 const paymentRoutes = require('./src/payment/paymentRoutes'); //payment processing
+const helmet = require('helmet'); //added protection on app
 
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
+
+app.disable('x-powered-by'); //security
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 
-app.use(cors());
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  credentials: true
+}));
 app.use(express.json());
+app.use(helmet());
 
 app.use("/api/clothing", clothingRoutes);
 app.use('/api', userRoutes)
@@ -27,6 +34,23 @@ app.use('/api', uploadRoutes);
 app.use('/api/contact', emailRoutes);
 app.use('/api/admin/contacts', contactAdminRoutes); //admin contact management routes
 app.use('/api', paymentRoutes); //payment routes
+
+process.on('SIGTERM', () => {
+  console.log('SIGTERM signal received: closing PostgreSQL pool');
+  pool.end(() => {
+    console.log('PostgreSQL pool has ended');
+    process.exit(0);
+  });
+});
+
+process.on('SIGINT', () => {
+  console.log('SIGINT (Ctrl+C) detected: closing PostgreSQL pool');
+  pool.end(() => {
+    console.log('PostgreSQL pool has ended');
+    process.exit(0);
+  });
+});
+
 
 // Health check
 app.get('/api/health', (req, res) => {
