@@ -13,11 +13,6 @@ const ContactManagement = () => {
     const { token } = useAuth();
 
     useEffect(() => {
-        fetchContacts();
-        fetchStats();
-    }, [fetchContacts, fetchStats]);
-
-    useEffect(() => {
         if (filter === 'all') {
             setFilteredContacts(contacts);
         } else {
@@ -65,6 +60,11 @@ const ContactManagement = () => {
             console.error('Error fetching stats:', err);
         }
     }, [token]);
+
+    useEffect(() => {
+        fetchContacts();
+        fetchStats();
+    }, [fetchContacts, fetchStats]);
 
     const deleteContact = async (id) => {
         if (!window.confirm('Are you sure you want to delete this contact submission?')) {
