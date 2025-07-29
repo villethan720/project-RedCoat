@@ -178,11 +178,11 @@ function Contact() {
                         {contactStatus && <p className="mb-6 text-white font-semibold text-center">{contactStatus}</p>}
 
                         <form onSubmit={handleContactSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <label htmlFor="name" className="text-white px-2 py-1 font-brand text-left bg-red-600 rounded">Full Name <span className="text-white">*</span></label>
-                        <input type="text" name="name" placeholder="Enter your name" value={contactForm.name} onChange={handleContactChange} className="p-3 rounded bg-gray-800 placeholder-gray-400" required />
-                        <label htmlFor="email" className="text-white px-2 py-1 font-brand text-left bg-red-600 rounded">Email Address <span className="text-white">*</span></label>
-                        <input type="email" name="email" placeholder="Enter your Email Address" value={contactForm.email} onChange={handleContactChange} className="p-3 rounded bg-gray-800 placeholder-gray-400" required />
-                        <label htmlFor="phone" className="text-white px-2 py-1 font-brand text-left bg-red-600 rounded">Phone Number</label>
+                        <label htmlFor="name" className="text-white bg-black text-base rounded px-2 py-1 block w-full max-w-xs mb-1">Full Name <span className="text-red-600">*</span></label>
+                        <input type="text" name="name" placeholder="Ex: John Doe" value={contactForm.name} onChange={handleContactChange} className="p-3 rounded bg-gray-800 placeholder-gray-400 col-span-2" required />
+                        <label htmlFor="email" className="text-white bg-black text-base rounded px-2 py-1 block w-full max-w-xs mb-1">Email Address <span className="text-red-600">*</span></label>
+                        <input type="email" name="email" placeholder="Ex: JohnDoe123@gmail.com" value={contactForm.email} onChange={handleContactChange} className="p-3 rounded bg-gray-800 placeholder-gray-400 col-span-2" required />
+                        <label htmlFor="phone" className="text-white bg-black text-base rounded px-2 py-1 block w-full max-w-xs mb-1">Phone Number</label>
                         <input 
                             type="tel" 
                             name="phone" 
@@ -191,10 +191,10 @@ function Contact() {
                             onChange={handleContactChange} 
                             pattern="\(\d{3}\) \d{3}-\d{4}"
                             maxLength="14"
-                            className="p-3 rounded bg-gray-800 placeholder-gray-400" 
+                            className="p-3 rounded bg-gray-800 placeholder-gray-400 col-span-2" 
                         />
-                        <label htmlFor="message" className="text-white px-2 py-1 font-brand text-left bg-red-600 rounded">Message <span className="text-white">*</span></label>
-                        <textarea name="message" placeholder="Enter your message!" rows="6" value={contactForm.message} onChange={handleContactChange} className="p-3 rounded bg-gray-800 placeholder-gray-400 col-span-2" required />
+                        <label htmlFor="message" className="text-white bg-black text-base rounded px-2 py-1 block w-full max-w-xs mb-1">Message <span className="text-red-600">*</span></label>
+                        <textarea name="message" placeholder="Talk to us!" rows="6" value={contactForm.message} onChange={handleContactChange} className="p-3 rounded bg-gray-800 placeholder-gray-400 col-span-2" required />
                         <button type="submit" className="bg-red-600 hover:bg-blue-600 transition text-white py-3 px-6 rounded">Send Message</button>
                     </form>
                     </div>
@@ -226,9 +226,9 @@ function Contact() {
 
                         <form onSubmit={handleSponsorSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <label htmlFor="name" className="text-white bg-black text-base rounded px-2 py-1 block w-full max-w-xs mb-1">Full Name <span className="text-red-500">*</span></label>
-                            <input type="text" name="name" placeholder="Enter your name" value={sponsorForm.name} onChange={handleSponsorChange} className="p-3 rounded bg-gray-800 placeholder-gray-400 col-span-2" required />
+                            <input type="text" name="name" placeholder="Ex: John Doe" value={sponsorForm.name} onChange={handleSponsorChange} className="p-3 rounded bg-gray-800 placeholder-gray-400 col-span-2" required />
                             <label htmlFor="email" className="text-white bg-black text-base rounded px-2 py-1 block w-full max-w-xs mb-1">Email Address <span className="text-red-500">*</span></label>
-                            <input type="email" name="email" placeholder="Enter your Email Address" value={sponsorForm.email} onChange={handleSponsorChange} className="p-3 rounded bg-gray-800 placeholder-gray-400 col-span-2" required />
+                            <input type="email" name="email" placeholder="Ex: JohnDoe123@gmail.com" value={sponsorForm.email} onChange={handleSponsorChange} className="p-3 rounded bg-gray-800 placeholder-gray-400 col-span-2" required />
                             <label htmlFor="phone" className="text-white bg-black text-base rounded px-2 py-1 block w-full max-w-xs mb-1">Phone Number <span className="text-red-500">*</span></label>
                             <input 
                                 type="tel" 

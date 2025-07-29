@@ -55,7 +55,6 @@ function Home() {
       >
         <div className="absolute inset-0 bg-black bg-opacity-60 flex flex-col justify-center text-white text-center px-6">
           <h1 className="text-5xl font-bold mb-4">It's Red Coat 🎈</h1>
-          <p className="text-2xl mb-8 font-modern">Make authentic connections</p>
         </div>
       </section>
 
