@@ -51,6 +51,10 @@ process.on('SIGINT', () => {
   });
 });
 
+app.get('/', (req, res) => {
+  res.send('API is running. Welcome!');
+});
+
 
 // Health check
 app.get('/api/health', (req, res) => {
