@@ -2,10 +2,10 @@ const API_CONFIG = {
     // Use relative URLs to hide the actual server address
     BASE_URL: process.env.NODE_ENV === 'production' 
         ? process.env.REACT_APP_API_BASE_URL || '' 
-        : (process.env.REACT_APP_API_BASE_URL || 'http://localhost:3009'),
+        : (process.env.REACT_APP_API_BASE_URL),
     API_URL: process.env.NODE_ENV === 'production'
         ? '/api'  // Use relative path in production
-        : (process.env.REACT_APP_API_URL || 'http://localhost:3009/api'),
+        : (process.env.REACT_APP_API_URL),
     ENDPOINTS: {
         // Contact endpoints
         CONTACT: '/contact',
@@ -13,8 +13,8 @@ const API_CONFIG = {
         
         // Auth endpoints
         LOGIN: '/login',
-        REGISTER: '/register',
-        VERIFY_EMAIL: '/verify-email',
+        //REGISTER: '/register',
+        //VERIFY_EMAIL: '/verify-email',
         
         // Clothing endpoints
         CLOTHING: '/clothing',
