@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../components/AuthContext';
 import { buildApiUrl } from '../config/api';
 import API_CONFIG from '../config/api';
@@ -15,7 +15,7 @@ const ContactManagement = () => {
     useEffect(() => {
         fetchContacts();
         fetchStats();
-    }, []);
+    }, [fetchContacts, fetchStats]);
 
     useEffect(() => {
         if (filter === 'all') {
@@ -25,7 +25,7 @@ const ContactManagement = () => {
         }
     }, [contacts, filter]);
 
-    const fetchContacts = async () => {
+    const fetchContacts = useCallback(async () => {
         try {
             const response = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.ADMIN_CONTACTS, '/all'), {
                 headers: {
@@ -46,9 +46,9 @@ const ContactManagement = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [token]);
 
-    const fetchStats = async () => {
+    const fetchStats = useCallback(async () => {
         try {
             const response = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.ADMIN_CONTACTS, '/stats/overview'), {
                 headers: {
@@ -64,7 +64,7 @@ const ContactManagement = () => {
         } catch (err) {
             console.error('Error fetching stats:', err);
         }
-    };
+    }, [token]);
 
     const deleteContact = async (id) => {
         if (!window.confirm('Are you sure you want to delete this contact submission?')) {
