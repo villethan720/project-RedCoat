@@ -17,8 +17,8 @@ const team = [
         name:'Greg Pai Sr.',
         title: 'Strategic Advisor',
         image: Logo,
-        intro: 'From the Bronx,',
-        bio: 'Greg Pai Sr. is a monster in the industry.',
+        intro: 'From the Bronx, Greg Sr. is a highly accomplished individual who has decided to provide his abilities to Red Coat. He has a bright, high energy attitude that is backed up with years of experience.',
+        bio: `Greg Pai Sr. is a seasoned executive with a distinguished career working alongside high-profile individuals and organizations. His notable accomplishments include serving as manager to Eddie Murphy, holding the position of Executive Vice President at Speer Communications, and playing a key role in the launch of the Game Show Network. At Red Coat, Greg serves as our Strategic Advisor, offering guidance and mentorship to help shape and grow the company. Beyond his professional achievements, he is deeply passionate about photography, music, and community service.`,
         email: 'GregSr@gmail.com',
     },
     {
@@ -26,7 +26,7 @@ const team = [
         title: 'Creative Coordinator',
         image: EthanBio1,
         intro: 'Hailing from Central Texas, Ethan is a young and ambitious creative contributing his talents to Red Coat. He is the mind behind our logo and website design and continues to bring fresh, innovative ideas to the team.',
-        bio: `Ethan Villa is a recent graduate from Point Park University that is eager to share his talents with the world. He provides new ideas that benefits the team and our sponsors. His main focus is the development of Red Coat's technology so we can reach others easier. But along with that, he provides designs for the clothing and a let's get it attitude.`,
+        bio: `Ethan Villa is a recent graduate from Point Park University that is eager to share his talents with the world. He provides new ideas that benefits the team and our sponsors. His main passion is improving the technology for Red Coat so that our users can have a user friendly experience when learning more about Red Coat. Along with improving Red Coat's technology, He provides different ideas for clothing and visual aspects of Red Coat. His role is fluid and he has taken the reigns completely.`,
         email: 'villaethan720@gmail.com'
     },
     {
@@ -89,7 +89,8 @@ function Team() {
                   </div>
                 </div>
               </div>
-              
+
+              {/* Team Member fields */}
               <div className="text-left flex-1">
                 <h2 className="text-2xl font-bold text-red-600 font-brand">{member.name}</h2>
                 <p className="text-sm text-gray-400 mb-2 font-modern">{member.title}</p>

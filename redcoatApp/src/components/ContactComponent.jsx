@@ -177,6 +177,7 @@ function Contact() {
                     <div className="lg:w-1/2">
                         {contactStatus && <p className="mb-6 text-white font-semibold text-center">{contactStatus}</p>}
 
+                        {/* Form for general inquiries */}
                         <form onSubmit={handleContactSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <label htmlFor="name" className="text-white bg-black text-base rounded px-2 py-1 block w-full max-w-xs mb-1">Full Name <span className="text-red-600">*</span></label>
                         <input type="text" name="name" placeholder="Ex: John Doe" value={contactForm.name} onChange={handleContactChange} className="p-3 rounded bg-gray-800 placeholder-gray-400 col-span-2" required />
@@ -206,7 +207,7 @@ function Contact() {
                 <Link to="/team" className="bg-black hover:text-red-600 px-4 py-2 rounded transition">Meet the Team!</Link>
             </section>
 
-            {/* Sponsor Form */}
+            {/* Sponsor section */}
             <section className="py-16 px-6 md:px-20 bg-black font-brand">
                 <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8">
                     {/* Left side of content */}
@@ -221,6 +222,7 @@ function Contact() {
                         </p>
                     </div>
 
+                    {/* Sponsor form */}
                     <div className="lg:w-1/2">
                         {sponsorStatus && <p className="mb-6 text-white font-semibold">{sponsorStatus}</p>}
 

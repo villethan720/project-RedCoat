@@ -60,6 +60,8 @@ function Mission(){
                 </div>
             </section>
 
+            {/* People we work with and our current sponsors */}
+
             <section className="py-16 bg-red-600 text-center">
                 <h2 className="text-3xl font-bold mb-4 text-black">Feel free to contact us to learn more!</h2>
                 <Link to="/contact" className="p-6 py-4 px-6 text-white bg-black rounded">Contact Us!</Link>
