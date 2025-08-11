@@ -4,6 +4,8 @@ import ProductCard from '../components/ProductCard';
 import Logo from './Assets/redcoatLogo.png';
 
 const ClothingCatalog = () => {
+    const showComingSoon = true; //change when api is updated
+
     const [clothing, setClothing] = useState([]);
     const [loading, setLoading] = useState(true);
     //variable for filtering
@@ -73,6 +75,18 @@ const ClothingCatalog = () => {
         setCategory('');
         setSize('');
         fetchClothing();
+    }
+
+    // 👉 Add this short-circuit return BEFORE your regular layout
+    if (showComingSoon) {
+        return (
+            <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-10 text-center">
+                <h1 className="text-4xl font-bold mb-4">🛍️ Shop Coming Soon!</h1>
+                <p className="text-lg max-w-xl">
+                    Stay tuned for a clothing drop soon🎈
+                </p>
+            </div>
+        );
     }
 
     if(loading) return <p className="text-white p-6 text-center">Loading...</p>;
