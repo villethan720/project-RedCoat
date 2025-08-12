@@ -20,8 +20,13 @@ app.disable('x-powered-by'); //security
 sgMail.setApiKey(process.env.SENDGRID_API_KEY); //for sending emails
 
 //for production usage connecting to correct app
+const allowedOrigins = [
+  process.env.FRONTEND_URL
+];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
+  origin: allowedOrigins,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
 app.use(express.json());
