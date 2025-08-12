@@ -53,7 +53,8 @@ const confirmPayment = async (req, res) => {
         if (paymentIntent.status === 'succeeded') {
             // - Save order to database
             // - Update inventory
-            // - Send confirmation email
+            
+            //Send confirmation email
             const msg = {
                 to: process.env.TO_EMAIL,
                 from: process.env.FROM_EMAIL,

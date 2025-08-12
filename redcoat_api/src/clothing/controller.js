@@ -1,5 +1,6 @@
 const pool = require('../../db');
 const queries = require('./queries');
+const { clothingSchema } = require('../validators/clothingValidator');
 
 // Get all active clothing
 const getClothing = async (req, res) => {
@@ -40,67 +41,68 @@ const getClothingById = async (req, res) => {
 
 // Add new clothing
 const addClothing = async (req, res) => {
-  const {
-    name,
-    price,
-    category,
-    image_url,
-    description,
-    stock_by_size,
-  } = req.body;
+  const { error, value } = clothingSchema.validate(req.body, { abortEarly: false });
 
-  if (!name || !price || !category) {
-    return res.status(400).send("Missing required fields");
+  if (error) {
+    return res.status(400).json({
+      error: 'Validation failed',
+      details: error.details.map((detail) => detail.message),
+    });
   }
 
+  const { name, price, category, image_url, description, stock_by_size } = value;
+
   try {
-    const result = await pool.query(queries.addClothing, [ // 🔧 FIXED key: should be addClothing not addClothes
-      name,
-      price,
-      category,
-      image_url,
-      description,
+    const result = await pool.query(queries.addClothing, [
+      name, 
+      price, 
+      category, 
+      image_url, 
+      description, 
       stock_by_size
     ]);
     res.status(201).json(result.rows[0]);
-  } catch (error) {
-    console.error("Error adding clothing:", error);
-    res.status(500).send("Error adding clothing");
+  } catch (err) {
+    console.error('Error adding clothing:', err);
+    res.status(500).json({ error: 'Interal server error' });
   }
 };
 
 // Update clothing
 const updateClothes = async (req, res) => {
-  const id = parseInt(req.params.id);
-  const {
-    name,
-    price,
-    category,
-    image_url,
-    description,
-    stock_by_size
-  } = req.body;
+  const id = parseInt(req.params.id, 10);
+  if (isNaN(id)) return res.status(400).json({ error: 'Invalid ID' });
 
-  if (isNaN(id)) return res.status(400).send("Invalid ID");
+  const { error, value } = clothingSchema.validate(req.body, {abortEarly: false });
+  if (error) {
+    return res.status(400).json({
+      error: 'Validation failed',
+      details: error.details.map((detail) => detail.message),
+    });
+  }
+
+  const { name, price, category, image_url, description, stock_by_size } = value;
 
   try {
-    const check = await pool.query(queries.getClothById, [id]); // 🔧 FIXED key again
-    if (!check.rows.length) return res.status(404).send("Clothing ID does not exist");
+    const check = await pool.query(queries.getClothById, [id]);
+    if (!check.rows.length) {
+      return res.status(404).json({ error: 'Clothing Id does not exist' });
+    }
 
-    await pool.query(queries.updateClothing, [ // 🔧 FIXED: should be updateClothing not updateClothes
-      name,
-      price,
-      category,
-      image_url,
-      description,
+    await pool.query(queries.updateClothing, [
+      name, 
+      price, 
+      category, 
+      image_url, 
+      description, 
       stock_by_size,
       id
     ]);
 
-    res.status(200).send("Clothing updated successfully");
-  } catch (error) {
-    console.error("Error updating clothing:", error);
-    res.status(500).send("Error updating clothing");
+    res.status(200).json({message: 'Clothing updated successfully' });
+  } catch (err) {
+    console.error('Error updating clothing:', err);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 

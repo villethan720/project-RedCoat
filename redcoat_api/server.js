@@ -17,17 +17,17 @@ const port = process.env.PORT || 3000;
 
 app.disable('x-powered-by'); //security
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+sgMail.setApiKey(process.env.SENDGRID_API_KEY); //for sending emails
 
-
+//for production usage connecting to correct app
 app.use(cors({
   origin: process.env.FRONTEND_URL,
   credentials: true
 }));
 app.use(express.json());
-app.use(helmet());
+app.use(helmet()); //for added security
 
-app.use("/api/clothing", clothingRoutes);
+app.use("/api/v1/clothing", clothingRoutes);
 app.use('/api', userRoutes)
 
 app.use('/api', uploadRoutes);
@@ -35,6 +35,7 @@ app.use('/api/contact', emailRoutes);
 app.use('/api/admin/contacts', contactAdminRoutes); //admin contact management routes
 app.use('/api', paymentRoutes); //payment routes
 
+//to prevent excess usage on api allows it to shut down after not being used 
 process.on('SIGTERM', () => {
   console.log('SIGTERM signal received: closing PostgreSQL pool');
   pool.end(() => {
@@ -51,6 +52,7 @@ process.on('SIGINT', () => {
   });
 });
 
+//initial landing for production api
 app.get('/', (req, res) => {
   res.send('API is running. Welcome!');
 });

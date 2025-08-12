@@ -1,28 +1,30 @@
 const express = require('express');
 const router = express.Router();
-const { loginUser, registerUser } = require('../auth/adminController');
+const { loginUser } = require('../auth/adminController');
 const { authenticateToken, requireAdmin } = require('../middleware/authMiddleware'); 
 const pool = require('../../db');
 const crypto = require('crypto');
 const sgMail = require('@sendgrid/mail');
-const sendEmail = require('../utils/sendEmail');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-// Public routes
+//email format check 
+const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+// admin login
 router.post('/login', loginUser);
 
 
 // Admin-only route
 router.get('/admin/users', authenticateToken, requireAdmin, async (req, res) => {
     try {
-        const result = await pool.query( // fixed relative path from '../../db' to '../db'
-            'SELECT id, email, role, reward_points FROM users'
+        const result = await pool.query( 
+            'SELECT id, email, role  FROM users'
         );
         res.json(result.rows);
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Server error');
+        console.error('Error fetching users:', error);
+        res.status(500).send('Internal Server error');
     }
 });
 
@@ -30,8 +32,8 @@ router.get('/admin/users', authenticateToken, requireAdmin, async (req, res) => 
 router.post('/api/forgot-password', async (req, res) => {
     const {email } =req.body;
 
-    if(!email) {
-        return res.status(400).json({ success: false, message: 'Email is required' });
+    if(!email || !isValidEmail(email)) {
+        return res.status(400).json({ success: false, message: 'A Valid Email is required' });
     }
 
     try {
@@ -45,14 +47,14 @@ router.post('/api/forgot-password', async (req, res) => {
         }
 
         const token = crypto.randomBytes(32).toString('hex');
-        const tokenExpires = new Date(Date.now() + 3600000); // 1 hour
+        const tokenExpires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
 
         await client.query(
             'UPDATE users SET reset_token = $1, reset_token_expires = $2 WHERE email = $3',
             [token, tokenExpires, email]
         );
 
-        const resetLink = `http://localhost:3000/reset-password?token=${token}`;
+        const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
 
         const msg = {
             to: email,
@@ -67,19 +69,13 @@ router.post('/api/forgot-password', async (req, res) => {
         };
 
         await sgMail.send(msg);
-        var passwordResetHtml = `<p>You requested a password reset</p>
-            <p>Click the link below to reset your password:</p>
-            <a href="${resetLink}">${resetLink}</a>
-            <p>This link expires in 1 hour.</p>`;
-
-        //sendEmail(to: email, from: process.env.FROM_EMAIL, subject: 'Password Reset Request', text: passwordResetHtml);
-
         client.release();
+
         res.json({ success: true, message: 'Password reset link sent to email' });
     
     } catch (err) {
-        console.error('Error in forgot-password:', err);
-        res.status(500).json({ success: false, message: 'Server error' });
+        console.error('Error in /api/forgot-password:', err);
+        res.status(500).json({ success: false, message: 'Internal Server error' });
     }
 });
 

@@ -1,5 +1,8 @@
 const pool = require('../../db');
 
+//Validate that id is a numeric string
+const isValidId = (id) => /^\d+$/.test(id);
+
 // Get all contact submissions
 const getAllContacts = async (req, res) => {
     try {
@@ -12,7 +15,7 @@ const getAllContacts = async (req, res) => {
         const result = await pool.query(query);
         res.status(200).json(result.rows);
     } catch (error) {
-        console.error('Error fetching contacts:', error);
+        console.error('Error fetching contacts:', {error});
         res.status(500).json({ error: 'Failed to fetch contacts' });
     }
 };
@@ -44,6 +47,10 @@ const getContactsByType = async (req, res) => {
 // Get a single contact by ID
 const getContactById = async (req, res) => {
     const { id } = req.params;
+
+    if (!isValidId(id)) {
+        return res.status(400).json({error: 'Invalid ID format, ID must be number'});
+    }
     
     try {
         const query = `
@@ -60,7 +67,7 @@ const getContactById = async (req, res) => {
         
         res.status(200).json(result.rows[0]);
     } catch (error) {
-        console.error('Error fetching contact by ID:', error);
+        console.error('Error fetching contact by ID:', { id, error });
         res.status(500).json({ error: 'Failed to fetch contact' });
     }
 };
@@ -68,6 +75,10 @@ const getContactById = async (req, res) => {
 // Delete a contact submission
 const deleteContact = async (req, res) => {
     const { id } = req.params;
+
+    if (!isValidId(id)) {
+        return res.status(400).json({error: 'Invalid ID format, ID must be number'});
+    }
     
     try {
         const query = 'DELETE FROM contacts WHERE id = $1 RETURNING id';
@@ -79,7 +90,7 @@ const deleteContact = async (req, res) => {
         
         res.status(200).json({ success: 'Contact deleted successfully' });
     } catch (error) {
-        console.error('Error deleting contact:', error);
+        console.error('Error deleting contact:', {id, error});
         res.status(500).json({ error: 'Failed to delete contact' });
     }
 };
@@ -87,7 +98,7 @@ const deleteContact = async (req, res) => {
 // Get contact statistics
 const getContactStats = async (req, res) => {
     try {
-        const query = `
+        const recentQuery = `
             SELECT 
                 form_type,
                 COUNT(*) as count,
@@ -98,15 +109,7 @@ const getContactStats = async (req, res) => {
             ORDER BY date DESC, form_type
         `;
         
-        const result = await pool.query(query);
-        
-        // Process the results into a more useful format
-        const stats = {
-            total: 0,
-            general: 0,
-            sponsor: 0,
-            recent: result.rows
-        };
+        const recentResult = await pool.query(recentQuery);
         
         // Get total counts
         const totalQuery = `
@@ -116,16 +119,25 @@ const getContactStats = async (req, res) => {
             FROM contacts
             GROUP BY form_type
         `;
-        
         const totalResult = await pool.query(totalQuery);
+
+        // Process the results into a more useful format
+        const stats = {
+            total: 0,
+            general: 0,
+            sponsor: 0,
+            recent: result.rows
+        };
+
         totalResult.rows.forEach(row => {
-            stats[row.form_type] = parseInt(row.count);
-            stats.total += parseInt(row.count);
+            const count = parseInt(row.count, 10);
+            stats[row.form_type] = count;
+            stats.total += count;
         });
         
         res.status(200).json(stats);
     } catch (error) {
-        console.error('Error fetching contact stats:', error);
+        console.error('Error fetching contact stats:', {error});
         res.status(500).json({ error: 'Failed to fetch contact statistics' });
     }
 };

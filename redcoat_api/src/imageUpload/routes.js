@@ -18,5 +18,5 @@ const upload = multer({ storage });
 
 router.post('/upload', upload.single('image'), uploadImage);
 
-module.exports = router
+module.exports = router;
 

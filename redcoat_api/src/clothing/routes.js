@@ -4,10 +4,10 @@ const controller = require('./controller');
 const router = Router();
 
 //route for get active clothing
-router.get("/", controller.getClothing);
+router.get("/active", controller.getClothing);
 
 //route for getting all clothing
-router.get("/", controller.getAllClothing);
+router.get("/all", controller.getAllClothing);
 
 //route to get single clothing item
 router.get("/:id", controller.getClothingById);

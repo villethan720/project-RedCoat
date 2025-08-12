@@ -14,19 +14,20 @@ const router = Router();
 router.use(authenticateToken);
 router.use(requireAdmin);
 
+// Get contact statistics
+router.get('/stats/overview', getContactStats);
+
 // Get all contact submissions
 router.get('/all', getAllContacts);
 
 // Get contacts by form type (general or sponsor)
-router.get('/type/:formType', getContactsByType);
+router.get('/form-type/:formType', getContactsByType);
 
 // Get a specific contact by ID
-router.get('/:id', getContactById);
+router.get('/id/:id', getContactById);
 
 // Delete a contact submission
-router.delete('/:id', deleteContact);
+router.delete('/id/:id', deleteContact);
 
-// Get contact statistics
-router.get('/stats/overview', getContactStats);
 
 module.exports = router; 

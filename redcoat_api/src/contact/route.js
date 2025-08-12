@@ -14,12 +14,17 @@ router.post("/general", generalEmail);
 router.post("/", async (req, res) => {
     const { formType } = req.body;
     
-    if (formType === 'sponsor') {
-        return await sponsorEmail(req, res);
-    } else if (formType === 'general') {
-        return await generalEmail(req, res);
-    } else {
-        return res.status(400).json({ error: 'Invalid form type. Please specify "sponsor" or "general".' });
+    if (!formType) {
+        return res.status(400).json({ error: 'Missing formType. Expected "sponsor" or "general".' });
+    }
+
+    switch (formType.toLowerCase()) {
+        case 'sponsor':
+            return sponsorEmail(req, res);
+        case 'general':
+            return generalEmail(req, res);
+        default:
+            return res.status(400).json({ error: 'Invalid formType. Must be "sponsor" or "general".' });
     }
 });
 
