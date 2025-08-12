@@ -33,7 +33,7 @@ app.use(cors({
 app.use(express.json());
 app.use(helmet()); //for added security
 
-app.use("/api/v1/clothing", clothingRoutes);
+app.use("/api/clothing", clothingRoutes);
 app.use('/api', userRoutes)
 
 app.use('/api', uploadRoutes);
@@ -76,7 +76,7 @@ app.get('/api/health', (req, res) => {
   });
 
 app.listen(port, () => {
-    console.log(`🚀 Server running on http://localhost:${port}`);
+    console.log(`🚀 Server running on ${port}`);
     console.log(`📬 API ready to receive requests`);
     console.log(`💳 Payment processing enabled`);
 }); 
