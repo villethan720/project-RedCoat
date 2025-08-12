@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { LOGIN_URL } from '../api/login';
+import { buildApiUrl } from '../config/api';
+import API_CONFIG from '../config/api';
 import { useAuth } from '../components/AuthContext';
 
 const AdminLogin = () => {
@@ -15,8 +16,13 @@ const AdminLogin = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         try {
-            const res = await axios.post(LOGIN_URL, { email, password }); //API call
+            const res = await axios.post(
+                buildApiUrl(API_CONFIG.ENDPOINTS.LOGIN), 
+                { email, password }
+            ); //API call
+
             login(res.data.token); // Use AuthContext to store token
             navigate('/admin-dashboard');
         } catch (err){
