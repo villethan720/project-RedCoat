@@ -88,7 +88,7 @@ function Contact() {
 
         try {
             //get api endpoint for sendgrid
-            const res = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.CONTACT), {
+            const res = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.GENERAL_CONTACT), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -128,7 +128,7 @@ function Contact() {
 
         try {
             //get api endpoint for sendgrid
-            const res = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.CONTACT), {
+            const res = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.SPONSOR_CONTACT), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

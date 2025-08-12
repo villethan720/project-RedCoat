@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import {
-  getClothing,
-  addClothing,
-  updateClothing,
-  softDeleteClothing,
-  restoreClothing
-} from '../api/clothing'; //import functions for backend use
+import { buildApiUrl } from '../config/api';
+import API_CONFIG from '../config/api';
 import ImageDropZone from '../components/ImageDropZone';
 import { Link } from 'react-router-dom';
 import Logo from '../components/Assets/redcoatLogo.png';
@@ -45,10 +40,15 @@ function UpdateCatalog() {
   const totalPages = Math.ceil(filteredResults.length / itemsPerPage);
 
 
-  // Fetch existing clothing
+  // Fetch all existing clothing
   const fetchClothing = async () => {
     try {
-      const data = await getClothing();
+      const res = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.ALLCLOTHING), {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json'}
+      });
+
+      const data = await res.json();
       setClothingList(data); //store clothing in state
       setFilteredResults(data); //set filter 
     } catch (error) {
@@ -116,20 +116,38 @@ function UpdateCatalog() {
         stock_by_size: JSON.stringify(stockBySize)
       };
 
-      await addClothing(finalClothing); //call api function
+      //add new clothing to endpoint
+      const res = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.ADDCLOTHING), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(finalClothing),
+      });
+
+      if (!res.ok){
+        const err = await res.json();
+        throw new Error(err.message || 'Failed to add clothing');
+      }
+
       alert('Clothing Added');
-      setNewClothing({ //reset clothing
+
+      //reset clothing
+      setNewClothing({
         name: '',
         price: '',
         category: '',
         image_url: '',
         description: '',
-        is_active: 'true', //alwys set to true originally
+        is_active: 'true', //always set to true originally
       });
-      setStockBySize({ S: '', M: '', L: '', XL: '' , ONE_SIZE: ''}); //reset sizes 
+
+      //reset size
+      setStockBySize({ S: '', M: '', L: '', XL: '' , ONE_SIZE: ''}); //reset sizes
+      
+      //refresh clothing list
       fetchClothing();
     } catch (error) {
       console.error('Failed to add clothing:', error);
+      alert("Failed to add clothing");
     }
   };
 
@@ -147,7 +165,7 @@ function UpdateCatalog() {
       console.log('📦 Current editClothing:', editClothing);
   
       //get stock information, parse info
-      const stock = typeof editClothing.stock_by_size === 'string'
+      const parsedStock = typeof editClothing.stock_by_size === 'string'
         ? JSON.parse(editClothing.stock_by_size)
         : editClothing.stock_by_size;
   
@@ -155,10 +173,22 @@ function UpdateCatalog() {
       const finalClothing = {
         ...editClothing,
         is_active: editClothing.is_active === 'true' || editClothing.is_active === true,
-        stock_by_size: JSON.stringify(stock)
+        stock_by_size: JSON.stringify(parsedStock)
       };
   
-      await updateClothing(id, finalClothing);
+      const url = buildApiUrl(API_CONFIG.ENDPOINTS.UPDATECLOTHING, `/${id}`);
+
+      const res = await fetch(url, {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json' },
+        body: JSON.stringify(finalClothing),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || 'Failed to update clothing');
+      }
+
       setEditClothing(null); //reset edit clothing for next edit
       fetchClothing();
     } catch (error) {
@@ -170,7 +200,18 @@ function UpdateCatalog() {
   //delete(isActive false) clothing
   const handleSoftDelete = async (id) => {
     try {
-      await softDeleteClothing(id);
+      const url = buildApiUrl(API_CONFIG.ENDPOINTS.SOFTDELETE, `/${id}`);
+
+      const res = await fetch(url, {
+        method: 'DELETE',
+        headers: {'Content-Type': 'application/json'},
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || 'Failed to soft delete clothing');
+      }
+
       fetchClothing();
     } catch (error) {
       console.error('Failed to delete clothing:', error);
@@ -180,7 +221,18 @@ function UpdateCatalog() {
   //isActive true for clothing
   const handleRestore = async (id) => {
     try {
-      await restoreClothing(id);
+      const url = buildApiUrl(API_CONFIG.ENDPOINTS.RESTORECLOTHING, `/${id}`);
+
+      const res = await fetch(url, {
+        method: 'PATCH',
+        headers: {'Content-Type': 'application/json'}
+      })
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || 'Failed to restore clothing');
+      }
+
       fetchClothing();
     } catch (error) {
       console.error('Failed to restore clothing:', error);
@@ -346,7 +398,7 @@ function UpdateCatalog() {
                         .filter(key => !['_id', '__v', 'stock_by_size'].includes(key))
                         .map(key => (
                           <div key={key} className="mb-2">
-                            <label className="block text-sm font-semibold text-white mb-1 captialize">
+                            <label className="block text-sm font-semibold text-white mb-1 capitalize">
                               {key.replace('_', ' ')}
                             </label>
                             {key === 'is_active' ? (
@@ -390,7 +442,7 @@ function UpdateCatalog() {
                                   stock_by_size: updatedStock
                                 }));
                               }}
-                              className="flex-1 p-2 bg-gray-400 tect-white rounded"
+                              className="flex-1 p-2 bg-gray-400 text-white rounded"
                               placeholder={`Quantity for ${size}`}
                             />
                           </div>
@@ -423,7 +475,7 @@ function UpdateCatalog() {
                               id: item.id || item._id,
                               stock_by_size: typeof item.stock_by_size === 'string'
                                 ? JSON.parse(item.stock_by_size)
-                                : item.stock_by_szize || { S: '', M: '', L: '', XL: '', ONE_SIZE: '' }
+                                : item.stock_by_size || { S: '', M: '', L: '', XL: '', ONE_SIZE: '' }
                             })
                           }
                           className="bg-red-600 px-3 py-1 rounded"

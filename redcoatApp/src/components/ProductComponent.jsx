@@ -1,5 +1,6 @@
 import React , { useEffect, useState }from 'react';
-import { getClothing } from '../api/clothing';
+import { buildApiUrl } from '../config/api';
+import API_CONFIG from '../config/api';
 import ProductCard from '../components/ProductCard';
 import Logo from './Assets/redcoatLogo.png';
 
@@ -27,7 +28,12 @@ const ClothingCatalog = () => {
     // Fetch existing clothing
     const fetchClothing = async () => {
         try {
-        const data = await getClothing();
+        const res = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.CLOTHING),{
+            method: 'GET',
+            headers: {'Content-Type': 'application/json' }
+        });
+
+        const data = await res.json();
         setClothing(data); //store clothing in state
         setFilteredResults(data);
 

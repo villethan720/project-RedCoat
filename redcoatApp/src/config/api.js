@@ -3,7 +3,8 @@ const API_CONFIG = {
     BASE_URL: process.env.REACT_APP_API_URL,
     ENDPOINTS: {
         // Contact endpoints
-        CONTACT: '/contact',
+        GENERAL_CONTACT: '/contact/general',
+        SPONSOR_CONTACT: '/contact/sponsor',
         ADMIN_CONTACTS: '/admin/contacts',
         
         // Auth endpoints
@@ -11,8 +12,23 @@ const API_CONFIG = {
         //REGISTER: '/register',
         //VERIFY_EMAIL: '/verify-email',
         
-        // Clothing endpoints
-        CLOTHING: '/clothing',
+        // active Clothing endpoints
+        CLOTHING: '/clothing/active',
+
+        // All clothing
+        ALLCLOTHING: '/clothing/all',
+
+        //add clothing 
+        ADDCLOTHING: '/clothing',
+
+        //update clothing
+        UPDATECLOTHING: '/clothing',
+
+        //soft delete clothing (make not active)
+        SOFTDELETE: '/clothing',
+
+        //restore clothing (make active)
+        RESTORECLOTHING: '/clothing/restore',
         
         // Payment endpoints
         PAYMENT: '/payment',
