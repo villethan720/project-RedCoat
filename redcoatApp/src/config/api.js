@@ -1,8 +1,6 @@
 const API_CONFIG = {
     // Use relative URLs to hide the actual server address
-    BASE_URL: process.env.NODE_ENV === 'production' 
-        ? '/api'
-        : (process.env.REACT_APP_API_URL),
+    BASE_URL: process.env.REACT_APP_API_URL,
     ENDPOINTS: {
         // Contact endpoints
         CONTACT: '/contact',
@@ -31,11 +29,6 @@ const API_CONFIG = {
 
 // Helper function to build full API URLs
 export const buildApiUrl = (endpoint, path = '') => {
-    return `${API_CONFIG.API_URL}${endpoint}${path}`;
-};
-
-// Helper function to build full base URLs
-export const buildBaseUrl = (endpoint, path = '') => {
     return `${API_CONFIG.BASE_URL}${endpoint}${path}`;
 };
 
