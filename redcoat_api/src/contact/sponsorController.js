@@ -19,7 +19,7 @@ const sponsorEmail = async (req, res) => {
     }
 
 
-    const safePhone = phone && phone.trim() !== '';
+    const safePhone = phone && phone.trim() !== '' ? phone.trim() : null;
 
     const subject = `New Sponsor/Representative Message: ${name}`;
     const text = `
@@ -33,7 +33,7 @@ const sponsorEmail = async (req, res) => {
         <h2>New Sponsor/Representative Inquiry</h2>
         <p><strong>Name:</strong> ${name}</p>
         <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Phone:</strong> ${safePhone}</p>
+        <p><strong>Phone:</strong> ${safePhone || 'N/A'}</p>
         <p><strong>Message:</strong><br/>${message}</p>
     `;
 
@@ -57,7 +57,15 @@ const sponsorEmail = async (req, res) => {
             contactId
         });
     } catch(error){
-        console.error('Error in sponsorEmail:', {error, email, name });
+        console.error('Error in sponsorEmail:', {
+            message: error.message,
+            stack: error.stack,
+            pgCode: error.code,
+            pgDetail: error.detail,
+            sendgridResponse: error.response && error.response.body,
+            email,
+            name
+        });
         res.status(500).json({error: 'Failed to send message or save to database'});
     }
 };

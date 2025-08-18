@@ -55,7 +55,15 @@ const generalEmail = async (req, res) => {
             contactId
         });
     } catch (error) {
-        console.error('Error in generalEmail:', { error, email, name });
+        console.error('Error in generalEmail:', {
+            message: error.message,
+            stack: error.stack,
+            pgCode: error.code,
+            pgDetail: error.detail,
+            sendgridResponse: error.response && error.response.body,
+            email,
+            name
+        });
         res.status(500).json({error: 'Failed to send message or save to database'});
     }
 };
