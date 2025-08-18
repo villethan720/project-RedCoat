@@ -61,7 +61,7 @@ const generalEmail = async (req, res) => {
         }
         
         res.status(200).json({ 
-            success: 'Message saved successfully',
+            success: 'We have received your message! 🎈',
             contactId,
             emailSent
         });
