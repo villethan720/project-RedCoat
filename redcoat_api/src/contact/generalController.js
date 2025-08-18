@@ -46,13 +46,24 @@ const generalEmail = async (req, res) => {
         const result = await pool.query(insertQuery, [name.trim(), email.trim().toLowerCase(), safePhone || null, message.trim(), 'general']);
 
         const contactId = parseInt(result.rows[0].id, 10);
-        
-        // Then send email
-        await sendEmail(process.env.GENERAL_EMAIL, process.env.FROM_EMAIL, subject, text, html);
+
+        // Attempt to send email, but do not fail the request if it errors
+        let emailSent = false;
+        try {
+            await sendEmail(process.env.GENERAL_EMAIL, process.env.FROM_EMAIL, subject, text, html);
+            emailSent = true;
+        } catch (emailErr) {
+            console.error('SendGrid error in generalEmail:', {
+                message: emailErr.message,
+                stack: emailErr.stack,
+                response: emailErr.response && emailErr.response.body,
+            });
+        }
         
         res.status(200).json({ 
-            success: 'Message has been sent!',
-            contactId
+            success: 'Message saved successfully',
+            contactId,
+            emailSent
         });
     } catch (error) {
         console.error('Error in generalEmail:', {
