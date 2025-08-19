@@ -7,8 +7,6 @@ import { buildApiUrl } from '../config/api';
 import API_CONFIG from '../config/api';
 
 function Home() {
-  //for new featured clothing, set false when clothing is ready
-  const showComingSoon = true;
 
   const [clothingItems, setClothingItems] = useState([]);
 
@@ -47,16 +45,6 @@ function Home() {
       },
     ],
   };
-
-  //placeholder for new releases
-  if (showComingSoon) {
-    return (
-      <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p -10 text-center">
-        <h1 className="text-4xl font-bold mb-4">🛍️ Shop Coming Soon!</h1>
-        <p className="text-lg max-w-xl">Stay tuned for a clothing drop soon🎈</p>
-      </div>
-    );
-  }
 
 
   return (
@@ -143,7 +131,7 @@ function Home() {
 
       {/* New Releases Section */}
       <section className="py-16 px-6 md:px-20 bg-gray-900">
-        <div className="max-w-6xl mx-auto">
+       {/* <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl font-bold text-center mb-8 font-brand">New Releases</h2>
           {Array.isArray(clothingItems) && clothingItems.length > 0 && (
             <Slider {...sliderSettings}>
@@ -154,6 +142,12 @@ function Home() {
               ))}
             </Slider>
           )}
+        </div> */}
+
+        {/* Placeholder for clothing until it is ready */}
+        <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p -10 text-center">
+          <h1 className="text-4xl font-bold mb-4">🛍️ Shop Coming Soon!</h1>
+          <p className="text-lg max-w-xl">Stay tuned for a clothing drop soon🎈</p>
         </div>
       </section>
     </div>
