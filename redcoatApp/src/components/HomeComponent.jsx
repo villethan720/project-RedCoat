@@ -144,11 +144,6 @@ function Home() {
           )}
         </div> 
 
-        {/* Placeholder for clothing until it is ready */}
-        <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p -10 text-center">
-          <h1 className="text-4xl font-bold mb-4">🛍️ Shop Coming Soon!</h1>
-          <p className="text-lg max-w-xl">Stay tuned for a clothing drop soon🎈</p>
-        </div>
       </section>
     </div>
   );
